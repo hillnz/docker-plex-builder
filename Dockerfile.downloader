@@ -1,0 +1,18 @@
+FROM nginx:alpine
+
+# HACK hardcode major version 1 as renovate only supports 3 version parts
+# renovate: datasource=docker depName=plexinc/pms-docker versioning=regex:^1\.(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+).+
+ARG PLEX_VERSION=1.22.1.4275-48e10484b
+ARG PLEX_BUILD
+
+ENV TAG=${PLEX_VERSION}
+ENV PLEX_DISTRO=debian
+
+ADD pms-docker/root/*.sh /
+
+RUN echo "${PLEX_VERSION}" >/PLEX_VERSION
+
+# HACK we pretend to install Plex, it'll fail because we're not on debian but the deb will remain for the taking
+RUN apk add bash curl && \
+    bash -e ./installBinary.sh || true && \
+    mv /tmp/plexmediaserver.deb /usr/share/nginx/html/
