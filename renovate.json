@@ -1,0 +1,16 @@
+{
+    "extends": [
+      "config:base"
+    ],
+    "automerge": true,
+    "regexManagers": [
+      {
+        "fileMatch": ["^build.sh$"],
+        "matchStrings": [
+          "datasource=(?<datasource>.*?) depName=(?<depName>.*?)( versioning=(?<versioning>.*?))?\\s.*?_VERSION=(?<currentValue>.*)\\s"
+        ],
+        "versioningTemplate": "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}"
+      }
+    ]
+  }
+  

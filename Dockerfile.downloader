@@ -1,0 +1,14 @@
+FROM nginx:alpine
+
+ARG PLEX_VERSION
+ARG PLEX_BUILD
+
+ENV TAG=${PLEX_VERSION}
+ENV PLEX_DISTRO=debian
+
+ADD pms-docker/root/*.sh /
+
+# HACK we pretend to install Plex, it'll fail because we're not on debian but the deb will remain for the taking
+RUN apk add bash curl && \
+    bash -e ./installBinary.sh || true && \
+    mv /tmp/plexmediaserver.deb /usr/share/nginx/html/
