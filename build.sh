@@ -4,9 +4,12 @@ set -e
 
 IMAGE_NAME=jonoh/plex
 
+tmp_dir=$(mktemp -d)
+trap 'rm -rf $tmp_dir' EXIT
+
 function build {
     dockerfile="$1"
-    target_platform="$2"
+    target_platform="$2"d
     plex_platform="$3"
 
     # HACK Download deb and host this to Plex image. Works around apparent qemu bug (https://github.com/docker/buildx/issues/328)
@@ -14,19 +17,16 @@ function build {
     trap 'docker stop $downloader_image || true && docker rmi $downloader_image || true' ERR RETURN
     docker build --progress plain -t "$downloader_image" --build-arg "PLEX_BUILD=$plex_platform" -f Dockerfile.downloader .
     docker run -d --rm --name "$downloader_image" -P "$downloader_image"
-
     port=$(docker port "$downloader_image" | sed 's/.*://')
-    plex_version=$(docker exec "$downloader_image" cat /PLEX_VERSION)
-    docker_tag="${plex_version}-$(echo "$target_platform" | sed -E 's#(linux)|/##g')"
 
     echo "Building for $target_platform using $dockerfile"
     cd pms-docker
     docker buildx build \
         --build-arg "URL=http://172.17.0.1:$port/plexmediaserver.deb" \
         --platform "$target_platform" \
-        --tag "$IMAGE_NAME:$docker_tag" \
+        --tag "plex/$target_platform" \
         -f "$dockerfile" \
-        --load \
+        --cache-to "type=local,dest=$tmp_dir" \
         --progress plain .
     cd -
 }

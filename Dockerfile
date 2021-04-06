@@ -1,7 +1,3 @@
-ARG BUILDPLATFORM
-ARG IMAGE_NAME=jonoh/plex
-FROM --platform=$BUILDPLATFORM alpine
-
-ARG platform_tag=
-
+FROM scratch
+ARG TARGETPLATFORM
 FROM plex/${TARGETPLATFORM}
