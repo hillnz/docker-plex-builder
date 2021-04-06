@@ -48,7 +48,7 @@ jobs:
 
       - name: Update repo description
         uses: peter-evans/dockerhub-description@v2
-        if: ${{ github.ref == 'refs/heads/master' }}
+        if: ${{ github.ref == 'refs/heads/main' }}
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
