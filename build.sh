@@ -70,12 +70,13 @@ build Dockerfile.arm64 linux/arm64 linux-aarch64 &
 wait
 
 # Finally, combine into single image manifest and push
-OUTPUT_FLAG=$([[ "$BUILD_OUTPUT" == "load" ]] && echo "" || echo "--$BUILD_OUTPUT") # "load" doesn't work for multi-platform
+OUTPUT_FLAG=$([[ "$BUILD_OUTPUT" == "push" ]] && echo "--push " || echo "")
+# shellcheck disable=SC2086
 docker buildx build \
     --build-arg "REGISTRY=$registry" \
     --builder plex_builder \
     --platform linux/amd64,linux/arm/v7,linux/arm64 \
-    "$OUTPUT_FLAG" \
+    $OUTPUT_FLAG\
     --tag "$IMAGE_NAME:$PLEX_VERSION" \
     --tag "$IMAGE_NAME:latest" \
     .
