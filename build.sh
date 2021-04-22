@@ -20,11 +20,13 @@ registry="$DOCKER_HOST:$(docker_port plex_registry)"
 
 # Private builder instance, to allow us to configure our registry
 builder_config=/tmp/plex_builder.toml
-cat <<EOF >/$builder_config
+cat <<EOF >$builder_config
 [registry."$registry"]
     http = true
     insecure = true
 EOF
+echo "Builder config:"
+cat $builder_config
 docker buildx create --name plex_builder --config "$builder_config"
 docker buildx inspect --bootstrap plex_builder
 
