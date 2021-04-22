@@ -11,7 +11,7 @@ BUILD_OUTPUT="${BUILD_OUTPUT:-load}"
 
 function docker_port {
     container_name="$1"
-    docker port "$container_name" | sed 's/.*://'
+    docker port "$container_name" | head -n1 | sed 's/.*://'
 }
 
 # Use private registry for intermediate builds; buildx can't see local images
