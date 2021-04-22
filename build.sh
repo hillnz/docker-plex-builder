@@ -16,6 +16,8 @@ function docker_port {
 
 # Use private registry for intermediate builds; buildx can't see local images
 docker run --rm -d -P --name plex_registry registry
+echo "docker port output:"
+docker port "$container_name"
 registry="$DOCKER_HOST:$(docker_port plex_registry)"
 
 # Private builder instance, to allow us to configure our registry
