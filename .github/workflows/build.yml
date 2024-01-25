@@ -47,7 +47,7 @@ jobs:
         run: ./build.sh
 
       - name: Update repo description
-        uses: peter-evans/dockerhub-description@v3
+        uses: peter-evans/dockerhub-description@v4
         if: ${{ github.ref == 'refs/heads/main' }}
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
