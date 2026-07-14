@@ -4,7 +4,7 @@ set -e
 
 # HACK hardcode major version 1 as renovate only supports 3 version parts
 # renovate: datasource=docker depName=plexinc/pms-docker versioning=regex:^1\.(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+).+
-PLEX_VERSION=1.43.2.10687-563d026ea
+PLEX_VERSION=1.43.3.10828-00f62d37d
 IMAGE_NAME="${IMAGE_NAME:-jonoh/plex}"
 DOCKER_HOST=172.17.0.1
 BUILD_OUTPUT="${BUILD_OUTPUT:-load}"
